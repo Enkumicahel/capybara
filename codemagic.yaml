@@ -18,3 +18,22 @@ workflows:
         echo "Create new cache"
         echo "Cache at $(date) from build ${FCI_BUILD_NUMBER}" > "${CACHE_FILE}"
         echo "Created cache \"$(cat "${CACHE_FILE}")\" at ${CACHE_FILE}"
+  caching-2:
+    instance_type: mac_pro
+    environment:
+      xcode: 12.5
+    cache:
+      cache_paths:
+        - $FCI_BUILD_DIR/cache
+    scripts:
+      - |
+        CACHE_FILE="${FCI_BUILD_DIR:?}/cache/cache.txt"
+        mkdir -p "$(dirname "${CACHE_FILE}")"
+        touch "${CACHE_FILE}"
+        CACHE_CONTENT=$(cat "${CACHE_FILE}")
+        echo "Cached content is \"${CACHE_CONTENT}\""
+        echo "Invalidate cache"
+        rm -f "${CACHE_FILE}"
+        echo "Create new cache"
+        echo "Cache at $(date) from build ${FCI_BUILD_NUMBER}" > "${CACHE_FILE}"
+        echo "Created cache \"$(cat "${CACHE_FILE}")\" at ${CACHE_FILE}"
